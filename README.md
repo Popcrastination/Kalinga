@@ -8,12 +8,12 @@
 
 # App Name
 
-> One sentence: what this app does, and who it is for.
+> Kalinga is a daily lifestyle and health tracking tool that helps users monitor their meals, drinks, exercise, and sleep while using the Gemini API to provide personalized insights and recommendations for improving their everyday habits.
 
-**Live demo:** https://YOURUSERNAME.github.io/YOUR-REPO/ <!-- GitHub Pages is set up already; replace if you host elsewhere -->
+**Live demo:** https://Popcrastination.github.io/Kalinga/
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
-**Author:** Your Name
+**Author:** Benedict G. Sangalang
 
 This repository lives in the author's own GitHub account and is public on
 purpose. There is no `student.json` here and there should not be one: see
@@ -39,18 +39,21 @@ A repo without screenshots reads as abandoned, whatever the code says.
 
 Three to five bullets. What can a user actually do?
 
-- ...
-- ...
-- ...
+- **Sign in** with a username and password, or register a new account (name, date of birth, height, weight).\
+- **See a daily wellness score**, today's progress at a glance, and a weekly sleep trend on the Dashboard.
+- **Log meals**, drinks, sleep duration, and exercise duration for the day (Daily Log).
+- **Review a daily summary**, weekly trends, and personalized suggestions (Overview).
+- **View and edit personal info** (height, weight) and wellness goals (Profile).
+
 
 ## Built with
 
 | | |
 | --- | --- |
 | Framework | Flutter (Dart) |
-| State | `setState` / provider / riverpod (say which) |
-| Storage | shared_preferences / Hive / Drift / Firebase / Supabase / other |
-| Other packages | list the ones that matter, with a word on why |
+| State | `setState` only, scoped to each screen — no app-wide state solution yet. Login/Register track their own loading spinner locally; Daily Log tracks which entries are logged locally. None of this is shared across screens yet, since there's no signed-in-user concept until auth is wired in. |
+| Storage | None yet — planned: Supabase (Postgres + Auth), chosen over local storage because the data is relational/dated (needs date-range queries for weekly charts) and because real password accounts need proper auth security, not because the app needs cross-device sync. See `docs/01-proposal.md` for the full reasoning. |
+| Other packages | `device_preview` — wraps the app in a phone-sized frame during development (and in the deployed build) so the UI is judged at real phone proportions. `cupertino_icons` — ships with the template default; not yet actively used. |
 
 ## Running it yourself
 
@@ -71,7 +74,9 @@ result.
 
 | Variable | What it is | Where to get one |
 | --- | --- | --- |
-| `EXAMPLE_API_KEY` | ... | ... |
+| `SUPABASE_URL` | Your Supabase project URL | Supabase dashboard → Project Settings → API |
+| `SUPABASE_PUBLISHABLE_KEY` | 	Your Supabase anon/publishable key | Same page as above |
+| `GEMINI_API_KEY` | Gemini API key, for Daily Log's meal/drink validation | Google AI Studio |
 
 ## Privacy and secrets
 
@@ -98,34 +103,29 @@ Required section. Two or three honest sentences:
 
 ## Status and what is next
 
-Be honest. What works, what is half done, what you would build next. An honest
-"known issues" section reads better than a claim the reader disproves in thirty
-seconds.
+Works: Login, Register, Dashboard, Daily Log, Overview, and Profile all render and navigate correctly between each other via the bottom nav bar. Form validation works (empty fields, password mismatch, DOB format, sleep/exercise number ranges). Profile's Edit toggle switches between read-only and editable Height/Weight fields.
+
+Half-done / stubbed: Every screen uses local, hardcoded, or in-memory placeholder data — nothing persists. Tapping a meal in Daily Log or Save in Profile only updates local widget state; refreshing the page loses it. Auth doesn't actually authenticate anything (Login/Register just navigate to Dashboard after a fake delay).
+
+Known issues: the four main screens each duplicate the same bottom-nav routing logic — should be refactored into one shared shell/IndexedStack rather than four separate Scaffolds once the backend pass starts touching this code anyway. There's no way to actually log out of anything real, since there's nothing real to be logged into yet.
+
+Next: wire up Supabase (auth + the six tables described in docs/01-proposal.md), replace Daily Log's placeholder entry sheet with real Gemini validation behind a proxy, and compute the wellness score / weekly trend percentages for real instead of hardcoding them.
 
 ## Credits
 
 - Packages: see `pubspec.yaml`
 - Assets, icons, 3D models, sounds: name the author and the licence for each
+- Logo: [Canva](https://www.canva.com/)
+- Color Palette: [Coolors](https://coolors.co/)
 - People who helped, and how
 
 ## AI use
 
-If you used AI while building this, say so here. Honest disclosure is the
-standard in this course and increasingly outside it, and reporting heavy use
-accurately costs you nothing.
+This project was developed with partial AI assistance (Claude) throughout the development process, including support with drafting and revising the proposal, implementing and refining parts of the code, and writing portions of the documentation. The design system, including the palette, typography, spacing, and components, as well as the Figma mockup, were independently designed and developed by the author.
 
-This section is the last 10 points of the finals badge, and it wants three
-things:
+A link to [AI-USAGE.md](AI-USAGE.md), where the full account lives
 
-![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
-
-- the badge above, or one you like better
-- a line naming which assistant you used and how much of the work it touched
-- a link to [AI-USAGE.md](AI-USAGE.md), where the full account lives
-
-Keep the detail in `AI-USAGE.md` rather than here. This section is the summary a
-visitor reads; that file is the record the badge is graded from.
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). Change it if you want different terms.
+MIT, see [LICENSE](LICENSE).
