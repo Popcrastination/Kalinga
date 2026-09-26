@@ -114,10 +114,8 @@ Next: wire up Supabase (auth + the six tables described in docs/01-proposal.md),
 ## Credits
 
 - Packages: see `pubspec.yaml`
-- Assets, icons, 3D models, sounds: name the author and the licence for each
 - Logo: [Canva](https://www.canva.com/)
 - Color Palette: [Coolors](https://coolors.co/)
-- People who helped, and how
 
 ## AI use
 
