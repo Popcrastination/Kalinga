@@ -26,14 +26,11 @@ personal data.
 
 | Log-In | Register | Dashboard |
 | --- | --- | --- |
-| ![<img width="472" height="902" alt="image" src="https://github.com/user-attachments/assets/3ff92e05-ef13-4015-9e52-01986e51d458" />](docs/assets/screen-log-in.png) | ![Register](docs/assets/screen-register.png) | ![Dashboard](docs/assets/screen-dashboard.png) |
+| ![Log-In](docs/assets/screen-log-in.png) | ![Register](docs/assets/screen-register.png) | ![Dashboard](docs/assets/screen-dashboard.png) |
 
 | Daily Log | Overview | Profile |
 | --- | --- | --- |
 | ![Daily Log](docs/assets/screen-daily-log.png) | ![Overview](docs/assets/screen-overview.png) | ![Add](docs/assets/screen-profile.png) |
-
-
-A repo without screenshots reads as abandoned, whatever the code says.
 
 ## What it does
 
