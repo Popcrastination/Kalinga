@@ -3,17 +3,22 @@
 ## Mockup
 ![Kalinga mockup](assets/mockup.pdf)
 
-Six screens, in order: Login → Register → Dashboard → Daily Log → Overview →
-Profile. Login → Register is a one-time, one-directional flow for new users
-(existing users skip straight to Dashboard); Dashboard, Daily Log, Overview,
-and Profile are siblings reachable from one another at any time via the
-bottom nav bar.
+| Log-In | Register | Dashboard |
+| --- | --- | --- |
+| ![Log-In](docs/assets/screen-log-in.png) | ![Register](docs/assets/screen-register.png) | ![Dashboard](docs/assets/screen-dashboard.png) |
+
+| Daily Log | Overview | Profile |
+| --- | --- | --- |
+| ![Daily Log](docs/assets/screen-daily-log.png) | ![Overview](docs/assets/screen-overview.png) | ![Add](docs/assets/screen-profile.png) |
 
 ## Wireframes
-The proposal's original 4-screen concept (Dashboard, Health Logging,
-Summary, Profile) served as the wireframe stage; the mockup above is the
-painted-in version, with Login/Register added once account creation turned
-out to be a real requirement rather than assumed.
+| Dashboard | Daily Log |
+| --- | --- |
+| ![Dashboard](docs/assets/wireframe-dashboard.png) | ![Daily Log](docs/assets/wireframe-daily-log.png) 
+
+| Overview | Profile |
+| --- | --- |
+| ![Overview](docs/assets/wireframe-overview.png) | ![Add](docs/assets/wireframe-profile.png) |
 
 ## Screens
 
