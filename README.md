@@ -10,6 +10,8 @@
 
 > Kalinga is a daily lifestyle and health tracking tool that helps users monitor their meals, drinks, exercise, and sleep while using the Gemini API to provide personalized insights and recommendations for improving their everyday habits.
 
+[![Made with Claude](https://img.shields.io/badge/Made_with-Claude_Assistance-orange)](AI-USAGE.md)
+
 **Live demo:** https://Popcrastination.github.io/Kalinga/
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
