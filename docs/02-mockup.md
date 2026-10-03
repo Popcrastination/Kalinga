@@ -1,4 +1,4 @@
-<img width="393" height="852" alt="wireframe-profile" src="https://github.com/user-attachments/assets/7e78c51a-7f5a-40e2-a08d-ca91550d7888" /># Mockup and wireframes
+# Mockup and wireframes
 
 ## Mockup
 ![](assets/mockup.pdf)
