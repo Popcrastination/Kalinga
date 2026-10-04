@@ -1,7 +1,7 @@
 # Presentation
 
 ## Video Presentation
-[View Presentation]([d/05-demo-video.md)
+[View Presentation]([05-demo-video.md)
 
 
 ## Slides
