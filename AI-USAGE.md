@@ -11,7 +11,7 @@ looks exactly like what it is.
 
 At least six entries. One per real use. Every entry needs a commit link.
 
-### 2026-09-5 - Revised the prelim proposal with a real storage decision
+### 2026-09-05 - Revised the prelim proposal with a real storage decision
 
 - **Tool:** Claude (Sonnet)
 - **What I asked for:** help revising the prelim app proposal now that Flutter
