@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_spacing.dart';
+import '../services/auth_service.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
 import 'register_page.dart';
@@ -31,21 +32,17 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _isLoading = true);
 
-    // TODO(auth): replace this whole block with a real Supabase call:
-    //   try {
-    //     await supabase.auth.signInWithPassword(
-    //       email: _usernameController.text,
-    //       password: _passwordController.text,
-    //     );
-    //   } on AuthException catch (e) {
-    //     // show e.message in a SnackBar instead of navigating
-    //   }
-    //
-    // TODO(state management): once more than this screen needs to know
-    // "is a user logged in," move auth status out of local setState and
-    // into a Provider/Riverpod (or similar) AuthController that the
-    // whole app can read from.
-    await Future.delayed(const Duration(milliseconds: 600)); // placeholder
+    try {
+      await AuthService.signIn(
+        username: _usernameController.text,
+        password: _passwordController.text,
+      );
+    } on AuthServiceException catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      return;
+    }
 
     if (!mounted) return;
     setState(() => _isLoading = false);
@@ -71,20 +68,12 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 64),
 
-                // --- Kalinga wordmark placeholder -----------------------
-                // No brand asset exists yet — swap for the real logo once
-                // it does, e.g. Image.asset('assets/images/logo.png').
-                Row(
-                  children: [
-                    Icon(Icons.eco, color: scheme.primary, size: 32),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      'Kalinga',
-                      style: textTheme.headlineSmall?.copyWith(
-                        color: scheme.primary,
-                      ),
-                    ),
-                  ],
+                // --- Kalinga wordmark ------------------------------------
+                Center(
+                  child: Image.asset(
+                    'assets/images/kalinga_logo.png',
+                    height: 64,
+                  ),
                 ),
                 const SizedBox(height: 48),
 

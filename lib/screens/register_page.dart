@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../constants/app_spacing.dart';
+import '../services/auth_service.dart';
 import '../utils/date_of_birth_formatter.dart';
+import '../utils/date_validators.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
 import 'dashboard_page.dart';
@@ -43,10 +45,15 @@ class _RegisterPageState extends State<RegisterPage> {
   String? _requiredValidator(String? value) =>
       (value == null || value.trim().isEmpty) ? 'This field is required' : null;
 
-  String? _dobValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Date of birth is required';
-    final regex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
-    if (!regex.hasMatch(value)) return 'Use MM/DD/YYYY';
+  /// No whitespace allowed — "john david" or "john david@example" should
+  /// both be rejected. Also disallows characters that would make the
+  /// synthetic-email trick in AuthService produce something invalid.
+  String? _usernameValidator(String? value) {
+    if (value == null || value.trim().isEmpty) return 'Username is required';
+    if (value.contains(RegExp(r'\s'))) return 'No spaces allowed';
+    if (!RegExp(r'^[a-zA-Z0-9_.]+$').hasMatch(value)) {
+      return 'Letters, numbers, underscore, and dot only';
+    }
     return null;
   }
 
@@ -66,23 +73,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
     setState(() => _isLoading = true);
 
-    // TODO(auth + data): replace with real Supabase calls, roughly:
-    //   final res = await supabase.auth.signUp(
-    //     email: _usernameController.text, // or a dedicated email field
-    //     password: _passwordController.text,
-    //   );
-    //   await supabase.from('profiles').insert({
-    //     'id': res.user!.id,
-    //     'username': _usernameController.text,
-    //     'first_name': _firstNameController.text,
-    //     'last_name': _lastNameController.text,
-    //     'date_of_birth': _dobController.text,
-    //     'height_cm': double.parse(_heightController.text),
-    //     'weight_kg': double.parse(_weightController.text),
-    //   });
-    // Row Level Security on `profiles` should restrict each row to its
-    // own authenticated user — see the design system's storage decision.
-    await Future.delayed(const Duration(milliseconds: 600)); // placeholder
+    try {
+      await AuthService.signUp(
+        username: _usernameController.text,
+        password: _passwordController.text,
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        dateOfBirth: _dobController.text,
+        heightCm: double.parse(_heightController.text),
+        weightKg: double.parse(_weightController.text),
+      );
+    } on AuthServiceException catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      return;
+    }
 
     if (!mounted) return;
     setState(() => _isLoading = false);
@@ -95,12 +101,16 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: scheme.primary,
-        leading: const BackButton(color: Colors.white),
+        leading: BackButton(color: scheme.onPrimary),
+        // Logo lives in the AppBar itself now, not the body below it —
+        // this is what puts it inside the green header, matching the
+        // mockup, instead of floating in the cream area beneath it.
+        title: Image.asset('assets/images/kalinga_logo.png', height: 32),
+        centerTitle: true,
       ),
       body: SafeArea(
         top: false,
@@ -112,17 +122,13 @@ class _RegisterPageState extends State<RegisterPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 24),
-                Text(
-                  'Kalinga',
-                  style: textTheme.headlineSmall?.copyWith(color: scheme.primary),
-                ),
-                const SizedBox(height: 24),
 
                 AppTextField(
                   label: 'Username',
                   hint: 'Enter your username',
                   controller: _usernameController,
-                  validator: _requiredValidator,
+                  inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+                  validator: _usernameValidator,
                 ),
                 const SizedBox(height: AppSpacing.md),
 
@@ -163,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           FilteringTextInputFormatter.digitsOnly,
                           DateOfBirthFormatter(),
                         ],
-                        validator: _dobValidator,
+                        validator: DateValidators.dateOfBirth,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),

@@ -5,20 +5,16 @@
 
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'screens/dashboard_page.dart';
 import 'screens/login_page.dart';
+import 'services/auth_service.dart';
+import 'services/supabase_config.dart';
 import 'theme.dart';
 
-void main() {
-  // TODO(setup): initialize Supabase here, before runApp, once the
-  // supabase_flutter package is added (`flutter pub add supabase_flutter`):
-  //   WidgetsFlutterBinding.ensureInitialized();
-  //   await Supabase.initialize(
-  //     url: const String.fromEnvironment('SUPABASE_URL'),
-  //     anonKey: const String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY'),
-  //   );
-  // SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are read from --dart-define at
-  // build time (see .env.example and .github/workflows/deploy-web.yml) —
-  // never hardcode them here.
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initSupabase();
+
   runApp(
     DevicePreview(
       enabled: true,
@@ -41,7 +37,10 @@ class KalingaApp extends StatelessWidget {
       builder: DevicePreview.appBuilder,
 
       theme: kalingaTheme,
-      home: const LoginPage(),
+      // Supabase persists the session locally, so a returning signed-in
+      // user skips straight past Login rather than being asked to sign in
+      // again every time they open the app.
+      home: AuthService.isSignedIn ? const DashboardPage() : const LoginPage(),
     );
   }
 }
