@@ -56,15 +56,7 @@ Three to five bullets. What can a user actually do?
 
 ## Running it yourself
 
-### 1. One-time backend setup
-
-The app needs a Supabase project before it can run. Follow [`docs/BACKEND-SETUP.md`](docs/BACKEND-SETUP.md), which covers:
-
-1. Running `supabase/sql/schema.sql` in your Supabase SQL Editor to create the tables
-2. Turning off **Confirm email** in Supabase Auth settings
-3. Deploying the `gemini-proxy` Edge Function and setting your Gemini key as a Supabase secret
-
-### 2. Configure your keys
+### Configure your keys
 
 ```bash
 cp .env.example .env
@@ -72,7 +64,7 @@ cp .env.example .env
 
 Fill in `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` (Supabase Dashboard → Project Settings → API). See [Environment variables](#environment-variables) below.
 
-### 3. Run it
+### Run it
 
 ```bash
 flutter pub get
