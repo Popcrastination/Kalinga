@@ -97,7 +97,11 @@ class _DailyLogPageState extends State<DailyLogPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => _LogEntrySheet(label: displayLabel, collectAmount: false),
+      builder: (context) => _LogEntrySheet(
+        label: displayLabel,
+        hint: 'e.g. grilled chicken and rice',
+        collectAmount: false,
+      ),
     );
     if (entry == null) return;
 
@@ -119,7 +123,11 @@ class _DailyLogPageState extends State<DailyLogPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => const _LogEntrySheet(label: 'Drinks', collectAmount: true),
+      builder: (context) => const _LogEntrySheet(
+        label: 'Drinks',
+        hint: 'e.g. water',
+        collectAmount: true,
+      ),
     );
     if (entry == null) return;
 
@@ -272,9 +280,14 @@ class _LogEntryResult {
 /// of closing the sheet if Gemini rejects it, so a bad entry never even
 /// reaches the "insert into Supabase" step.
 class _LogEntrySheet extends StatefulWidget {
-  const _LogEntrySheet({required this.label, required this.collectAmount});
+  const _LogEntrySheet({
+    required this.label,
+    required this.hint,
+    required this.collectAmount,
+  });
 
   final String label;
+  final String hint;
   final bool collectAmount;
 
   @override
@@ -353,7 +366,7 @@ class _LogEntrySheetState extends State<_LogEntrySheet> {
           const SizedBox(height: AppSpacing.sm),
           AppTextField(
             label: 'What did you have?',
-            hint: 'e.g. grilled chicken and rice',
+            hint: widget.hint,
             controller: _descriptionController,
           ),
           if (widget.collectAmount) ...[
